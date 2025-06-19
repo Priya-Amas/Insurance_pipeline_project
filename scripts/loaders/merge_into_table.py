@@ -5,7 +5,6 @@ from scripts.utils.logger import setup_logger
 
 logger = setup_logger("merge_into_table")
 
-load_dotenv()
 
 # Load credentials from .env
 =======
