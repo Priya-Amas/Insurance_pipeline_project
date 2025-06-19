@@ -1,3 +1,12 @@
+"""
+Merge uploaded data from staging table into final table.
+
+- Create target table if not exists
+- Use COPY INTO to stage
+- Use MERGE to deduplicate
+"""
+
+
 import os
 from dotenv import load_dotenv
 import snowflake.connector
