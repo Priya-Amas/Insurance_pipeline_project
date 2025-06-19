@@ -1,7 +1,0 @@
-Flask==2.2.5
-requests
-python-dotenv
-pytest
-snowflake-connector-python
-apache-airflow==2.6.2
-werkzeug==2.3.8
