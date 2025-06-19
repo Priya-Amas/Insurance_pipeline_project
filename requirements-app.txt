@@ -1,0 +1,6 @@
+Flask==2.2.5
+Werkzeug==2.2.3
+requests>=2.28
+python-dotenv>=1.0.0
+pytest==7.4.4
+snowflake-connector-python==3.3.1

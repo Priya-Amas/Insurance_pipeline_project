@@ -1,0 +1,255 @@
+
+# 2025-06-17 10:36:24.830761
++use schema TEST_SCHEMA;
+
+# 2025-06-17 10:36:38.680696
++-- Create stage if not exists
++CREATE OR REPLACE STAGE my_twitter_stage;
++
+
+# 2025-06-17 10:37:03.454831
++LIST @my_twitter_stage;
+
+# 2025-06-17 10:40:36.136540
++PUT file://$HOME/projects/snowflake_twitter_pipeline/sql/tweets_*.csv @twitter_stage AUTO_COMPRESS=TRUE;
+
+# 2025-06-17 10:41:36.234087
++exit;
+
+# 2025-06-17 10:41:46.929980
++exit();
+
+# 2025-06-17 10:42:28.991198
++!exit
+
+# 2025-06-17 10:49:20.712840
++use schema TEST_SCHEMA;
+
+# 2025-06-17 10:49:28.935785
++CREATE OR REPLACE TABLE tweets (
++    id STRING,
++    text STRING,
++    author_id STRING,
++    created_at TIMESTAMP
++);
+
+# 2025-06-17 10:49:45.098209
++CREATE OR REPLACE STAGE my_tweet_stage;
+
+# 2025-06-17 10:50:18.816931
++LIST @my_twitter_stage;
+
+# 2025-06-17 10:50:37.646023
++COPY INTO tweets
++FROM @my_tweet_stage
++FILE_FORMAT = (TYPE = 'CSV' FIELD_OPTIONALLY_ENCLOSED_BY = '\"' SKIP_HEADER = 1);
++
+
+# 2025-06-17 10:50:54.335651
++COPY INTO tweets
++FROM @my_twitter_stage
++FILE_FORMAT = (TYPE = 'CSV' FIELD_OPTIONALLY_ENCLOSED_BY = '\"' SKIP_HEADER = 1);
++
+
+# 2025-06-17 10:54:34.017479
++CREATE OR REPLACE TABLE tweets (
++    edit_history_tweet_ids STRING,
++    created_at TIMESTAMP,
++    text STRING,
++    id STRING,
++    author_id STRING
++);
++
+
+# 2025-06-17 10:54:58.850318
++COPY INTO tweets
++FROM @my_twitter_stage
++FILE_FORMAT = (
++    TYPE = 'CSV'
++    FIELD_OPTIONALLY_ENCLOSED_BY = '\"'
++    SKIP_HEADER = 1
++    ERROR_ON_COLUMN_COUNT_MISMATCH = FALSE
++)
++ON_ERROR = 'CONTINUE';
++
+
+# 2025-06-17 10:55:51.001013
++SELECT * FROM tweets LIMIT 10;
+
+# 2025-06-17 10:57:33.440497
++CREATE OR REPLACE TABLE tweets_final (
++  id STRING PRIMARY KEY,
++  text STRING,
++  author_id STRING,
++  created_at TIMESTAMP
++);
++
+
+# 2025-06-17 10:57:42.989547
++MERGE INTO tweets_final AS target
++USING tweets AS source
++ON target.id = source.id
++WHEN NOT MATCHED THEN
++  INSERT (id, text, author_id, created_at)
++  VALUES (source.id, source.text, source.author_id, source.created_at);
++
+
+# 2025-06-17 10:58:00.864313
++CREATE OR REPLACE PROCEDURE sp_merge_tweets()
++RETURNS STRING
++LANGUAGE SQL
++AS
++$$
++  MERGE INTO tweets_final AS target
++  USING tweets AS source
++  ON target.id = source.id
++  WHEN NOT MATCHED THEN
++    INSERT (id, text, author_id, created_at)
++    VALUES (source.id, source.text, source.author_id, source.created_at);
++  RETURN 'MERGE Completed';
++$$;
++
+
+# 2025-06-17 10:58:44.656681
++CREATE OR REPLACE PROCEDURE sp_merge_tweets()
++  RETURNS STRING
++  LANGUAGE SQL
++  AS
++$$
++BEGIN
++  MERGE INTO tweets_final AS target
++  USING tweets AS source
++  ON target.id = source.id
++  WHEN NOT MATCHED THEN
++    INSERT (id, text, author_id, created_at)
++    VALUES (source.id, source.text, source.author_id, source.created_at);
++  
++  RETURN 'MERGE Completed';
++END;
++$$;
++
+
+# 2025-06-17 10:58:55.636949
++CALL sp_merge_tweets();
+
+# 2025-06-17 10:59:25.472209
++!exit
+
+# 2025-06-18 09:36:49.069577
++SHOW TABLES LIKE 'CLAIMS_STAGING';
+
+# 2025-06-18 09:37:39.090510
++PUT file://sql/*.csv @%CLAIMS_STAGIN
++G auto_compress=false;
+
+# 2025-06-18 09:37:49.496399
++PUT file://sql/*.csv @%CLAIMS_STAGING auto_compress=false;
+
+# 2025-06-18 09:39:10.024741
++CREATE TABLE CLAIMS_STAGING (
++    claim_id STRING,
++    policy_id STRING,
++    customer_name STRING,
++    claim_amount NUMBER,
++    status STRING
++);
++
+
+# 2025-06-18 09:39:17.148748
++PUT file://sql/*.csv @%CLAIMS_STAGING auto_compress=false;
+
+# 2025-06-18 09:40:20.075780
++COPY INTO CLAIMS_STAGING
++FROM @%CLAIMS_STAGING
++FILE_FORMAT = (TYPE = 'CSV' FIELD_OPTIONALLY_ENCLOSED_BY = '"' SKIP_HEADER = 1);
++
+
+# 2025-06-18 09:40:48.220548
++select * from CLAIMS_STAGING
++;
+
+# 2025-06-18 09:41:00.806530
++select * from @%CLAIMS_STAGING
++;
+
+# 2025-06-18 09:41:46.114296
++List @%CLAIMS_STAGING;
+
+# 2025-06-18 09:47:23.697248
++CREATE OR REPLACE TABLE CLAIMS_FINAL (
++    id INTEGER PRIMARY KEY,
++    name STRING,
++    claim_type STRING,
++    amount FLOAT,
++    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
++);
++
+
+# 2025-06-18 09:47:31.463898
++exit()
++;
+
+# 2025-06-18 09:47:42.627643
++!exit
+
+# 2025-06-18 10:26:23.101894
++MERGE INTO CLAIMS_FINAL target
++USING CLAIMS_STAGING source
++ON target.id = source.id
++WHEN MATCHED THEN
++    UPDATE SET
++        target.name = source.name,
++        target.claim_type = source.claim_type,
++        target.amount = source.amount,
++        target.updated_at = CURRENT_TIMESTAMP
++WHEN NOT MATCHED THEN
++    INSERT (id, name, claim_type, amount)
++    VALUES (source.id, source.name, source.claim_type, source.amount);
++
+
+# 2025-06-18 10:27:02.448095
++select * from CLAIMS_STAGING;
+
+# 2025-06-18 10:27:15.756848
++show tables;
+
+# 2025-06-18 10:27:28.006176
++list stages;
+
+# 2025-06-18 10:27:39.401499
++show stages;
+
+# 2025-06-18 10:27:53.188921
++show tables;
+
+# 2025-06-18 10:28:07.492276
++select * from CLAIMS_STAGING;
+
+# 2025-06-18 10:28:42.700827
++MERGE INTO CLAIMS_FINAL target
++USING CLAIMS_STAGING source
++ON target.id = source.id
++WHEN MATCHED THEN
++    UPDATE SET
++        target.name = source.name,
++        target.claim_type = source.claim_type,
++        target.amount = source.amount,
++        target.updated_at = CURRENT_TIMESTAMP
++WHEN NOT MATCHED THEN
++    INSERT (id, name, claim_type, amount)
++    VALUES (source.id, source.name, source.claim_type, source.amount);
++
+
+# 2025-06-18 10:28:44.485202
++CREATE OR REPLACE TABLE CLAIMS_FINAL (
++    CLAIM_ID STRING PRIMARY KEY,
++    POLICY_ID STRING,
++    CUSTOMER_NAME STRING,
++    CLAIM_AMOUNT FLOAT,
++    STATUS STRING,
++    UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
++);
++
+
+# 2025-06-18 10:29:16.009673
++!exit

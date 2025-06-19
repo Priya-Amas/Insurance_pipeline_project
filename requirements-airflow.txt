@@ -1,0 +1,9 @@
+# Apache Airflow core
+apache-airflow==2.6.2
+
+# Optional: Include only providers you use (e.g., HTTP, SQLite, etc.)
+apache-airflow-providers-sqlite
+apache-airflow-providers-http
+apache-airflow-providers-ftp
+apache-airflow-providers-imap
+apache-airflow-providers-common-sql
