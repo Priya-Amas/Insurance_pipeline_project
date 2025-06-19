@@ -1,3 +1,8 @@
+Real-Time Insurance Data Pipeline
+
+— Designed and built an end-to-end pipeline using Python, Snowflake (internal stage), and Airflow 2.6.2. Implemented API ingestion, internal staging, MERGE-based deduplication, logging, unit testing, and modular DAG orchestration.
+
+
 # 🏥 Real-Time Insurance Data Pipeline (Apache Airflow + Snowflake)
 
 This project demonstrates a complete real-time data pipeline using:
