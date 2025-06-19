@@ -62,7 +62,7 @@ This project demonstrates a complete real-time data pipeline using:
         
 ## 🧪 To Run the Project (in WSL)
 
-```bash
+--bash
 # 1. Activate virtual environment
 source venv/bin/activate
 
@@ -78,16 +78,11 @@ python scripts/loaders/merge_into_table.py
 # 5. Or run it via Airflow
 airflow scheduler
 airflow webserver --port 8080
+
 🔬 To Run Unit Tests
 bash
-Copy
-Edit
 pytest tests/
-💼 Use Case
-This project can be mentioned in your resume or GitHub portfolio under:
 
-“Built a modular insurance data pipeline using Python, Snowflake, and Apache Airflow with automated JSON ingestion, deduplication via MERGE, and CI-level unit testing.”
-
-✅ Contact: [Your Name]
+✅ Contact: Shunmuga Priya
 📧 Email: shunmugapriya1901@gmail.com
 🌐 GitHub: https://github.com/yourusername/insurance_pipeline
