@@ -48,3 +48,13 @@ def post_insurance():
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
+# To run the API, use the command: python scripts/api/insurance_api.py
+# To test the API, you can use tools like Postman or curl to send GET and POST requests.
+# Example POST request payload:
+# {
+#     "customer_name": "John Doe",
+#     "premium_amount": 15000,                  
+#     "status": "Active"
+# }
+# Example GET request to retrieve policies: http://localhost:5000/insurance
+# Example POST request to create a new policy: http://localhost:5000/insurance
