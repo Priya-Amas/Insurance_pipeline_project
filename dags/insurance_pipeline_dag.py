@@ -6,6 +6,11 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
+from dags.tasks.upload_task import get_upload_task
+from dags.tasks.merge_task import get_merge_task
+# insurance_pipeline/dags/insurance_pipeline_dag.py
+# This DAG orchestrates the upload of JSON files to a Snowflake stage and merges them into
+# a target table in Snowflake. It consists of two main tasks:
 from scripts.loaders.upload_to_stage import upload_to_internal_stage
 from scripts.loaders.merge_into_table import merge_data_from_stage
 
@@ -23,14 +28,6 @@ with DAG(
     catchup=False
 ) as dag:
 
-    upload_task = PythonOperator(
-        task_id='upload_to_stage',
-        python_callable=upload_to_internal_stage
-    )
-
-    merge_task = PythonOperator(
-        task_id='merge_into_table',
-        python_callable=merge_data_from_stage
-    )
-
+    upload_task = get_upload_task(dag)
+    merge_task = get_merge_task(dag)
     upload_task >> merge_task
