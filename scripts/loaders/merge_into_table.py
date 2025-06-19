@@ -5,9 +5,9 @@ from scripts.utils.logger import setup_logger
 
 logger = setup_logger("merge_into_table")
 
+# Load credentials from .env
 load_dotenv()
 
-# Load credentials from .env
 account = os.getenv("SNOWFLAKE_ACCOUNT")
 user = os.getenv("SNOWFLAKE_USER")
 password = os.getenv("SNOWFLAKE_PASSWORD")
@@ -115,6 +115,7 @@ def merge_data_from_stage():
             logger.info("🔒 Snowflake connection closed.")
         except Exception:
             logger.error("❌ Error while closing connection.", exc_info=True)
+
 
 if __name__ == "__main__":
     merge_data_from_stage()
