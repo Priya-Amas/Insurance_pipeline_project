@@ -1,0 +1,6 @@
+Flask==2.3.3
+requests
+python-dotenv
+pytest
+snowflake-connector-python
+apache-airflow==2.6.2
