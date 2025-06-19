@@ -88,3 +88,8 @@ def merge_data_from_stage():
 
 if __name__ == "__main__":
     merge_data_from_stage()
+#     subprocess.run(["snowsql", "-q", query, "-o", "output_format=csv"])
+#             if result.returncode == 0:
+#                 print(f"✅ {file} uploaded successfully.")
+#             else:
+#                 print(f"❌ Failed to upload {file}: {result.stderr}") 
