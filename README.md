@@ -22,27 +22,39 @@ This project demonstrates a complete real-time data pipeline using:
 
 ## 📁 Folder Structure
 
-insurance_pipeline/
-├── dags/
-│ ├── insurance_pipeline_dag.py
-│ └── tasks/
-├── scripts/
-│ ├── loaders/
-│ └── utils/
-├── data/json/
-├── sql/
-├── tests/
-├── airflow/
-├── .env
-├── README.md
-└── venv/
-
-yaml
-Copy
-Edit
-
----
-
+.
+└── insurance_pipeline
+    ├── README.md
+    ├── __init__.py
+    ├── airflow
+    ├── dags
+    │   ├── insurance_pipeline_dag.py
+    │   └── tasks
+    │       └── __pycache__
+    ├── data
+    │   └── json
+    │       ├── insurance_20250619_100003_1.json
+    │       ├── insurance_20250619_100003_2.json
+    ├── requirements-airflow.txt
+    ├── requirements-app.txt
+    ├── scripts
+    │   ├── api
+    │   │   └── insurance_api.py
+    │   ├── loaders
+    │   │   ├── json_generator.py
+    │   │   ├── merge_into_table.py
+    │   │   └── upload_to_stage.py
+    │   └── utils
+    │       └── logger.py
+    ├── setup.py
+    ├── sql
+    │   └── create_table.sql
+    ├── tests
+    │   ├── test_api.py
+    │   ├── test_merge_into_table.py
+    │   └── test_upload_to_stage.py
+    └── venv
+        
 ## 🧪 To Run the Project (in WSL)
 
 ```bash
