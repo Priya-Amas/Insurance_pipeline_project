@@ -1,3 +1,12 @@
+"""
+Upload JSON files from local folder to Snowflake internal stage.
+
+Steps:
+1. List all .json files from data/json
+2. Check if file exists in stage
+3. If not, use PUT to upload
+"""
+
 import os
 import snowflake.connector
 from dotenv import load_dotenv
