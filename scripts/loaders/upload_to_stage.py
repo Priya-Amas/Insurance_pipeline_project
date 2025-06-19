@@ -5,7 +5,6 @@ from scripts.utils.logger import setup_logger
 
 logger = setup_logger("upload_to_stage")
 
-load_dotenv()
 
 # Load Snowflake credentials from .env
 =======
