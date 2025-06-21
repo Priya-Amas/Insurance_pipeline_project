@@ -27,6 +27,8 @@ This project demonstrates a complete real-time data pipeline using:
 
 ## 📁 Folder Structure
 
+![image](https://github.com/user-attachments/assets/ab42f05b-9f1b-4e94-a20f-673a7ddb9e0b)
+
 .
 └── insurance_pipeline
     ├── README.md
